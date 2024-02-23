@@ -1,8 +1,10 @@
 package com.amdrejr.springsecurityjwt.services;
 
 import java.time.Instant;
+import java.util.stream.Collectors;
 
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
@@ -25,21 +27,27 @@ public class JwtService {
         // Então, definimos o horário atual:
         Instant now = Instant.now();
         // e o tempo para que o token expire:
-        Long expiry = 3600l; // 1 hora
+        Long expiry = 30l; // 1 hora
 
         // Extraímos as roles (níveis de autoridade) do usuário do objeto authentication:
-        String userRoles = authentication.getAuthorities().toString();
+        String scope = authentication
+            .getAuthorities().stream()
+            .map(GrantedAuthority::getAuthority)
+            .collect(Collectors
+                .joining(" "));
         
         var claims = JwtClaimsSet.builder()
             .issuer("spring-security-jwt") // emissor do token
             .issuedAt(now) // horário de emissão
             .expiresAt(now.plusSeconds(expiry)) // horário de expiração
             .subject(authentication.getName()) // nome do usuário
-            .claim("roles", userRoles) // níveis de autoridade do usuário
+            .claim("roles", scope) // níveis de autoridade do usuário
             .build(); // construímos o token a partir das informações acima
         
+
+        System.out.println("Claims: " + claims.toString());    
         // Por fim, usamos o param encoder (JwtEncoder) para codificar os claims em um token JWT e o retornamos:
         return encoder.encode(JwtEncoderParameters.from(claims)).getTokenValue(); 
         // O método encode retorna um objeto JwtEncoding, e usamos getTokenValue() para obter a representação em String do token.
     }
-}
+}   

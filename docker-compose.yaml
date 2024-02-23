@@ -1,0 +1,15 @@
+version: '3'
+
+services:
+  mysql-db:
+    image: mysql:8.0
+    container_name: db-spring-security-jwt
+    environment:
+      MYSQL_ROOT_PASSWORD: 12345
+      MYSQL_DATABASE: spring-security-jwt
+    volumes: 
+      - ./mysql:/var/lib/mysql
+    ports:
+      - "3307:3306"
+
+# user: root

@@ -1,0 +1,25 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3307/spring-security-jwt?useTimezone=true&serverTimezone=UTC
+    username: root
+    password: 12345
+  sql:
+    init:
+      mode: always
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      show-sql: true
+    open-in-view: true  
+    defer-datasource-initialization: true
+
+
+# Variáveis
+jwt:
+  private:
+    key: classpath:keys/app.key
+  public:
+    key: classpath:keys/app.pub
+

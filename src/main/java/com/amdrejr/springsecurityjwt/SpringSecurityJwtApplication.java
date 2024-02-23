@@ -9,3 +9,8 @@ public class SpringSecurityJwtApplication {
 		SpringApplication.run(SpringSecurityJwtApplication.class, args);
 	}
 }
+
+
+// TO-DOS:
+// Criar banco de dados via docker-compose
+// Fazer a config do banco
