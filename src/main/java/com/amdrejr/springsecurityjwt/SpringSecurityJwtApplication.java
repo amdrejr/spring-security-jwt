@@ -12,5 +12,4 @@ public class SpringSecurityJwtApplication {
 
 
 // TO-DOS:
-// Criar banco de dados via docker-compose
-// Fazer a config do banco
+// implementar o logout

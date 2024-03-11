@@ -2,6 +2,7 @@ package com.amdrejr.springsecurityjwt.config;
 
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -18,6 +19,7 @@ import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
 
 import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.RSAKey;
@@ -34,9 +36,22 @@ public class SecurityConfig {
 
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+
+        var corsConfig = new CorsConfiguration();
+        corsConfig.setAllowedOrigins(List.of("http://localhost:3000", "http://localhost:4200"));
+        corsConfig.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
+        corsConfig.setAllowedHeaders(List.of("*"));
+        corsConfig.setAllowCredentials(true);
+
+
         http
             .csrf(csrf -> csrf.disable())
-            .cors(cors -> cors.disable())
+            // resolver essa parte aqui abaixo
+            // .logout(
+            //     logout -> logout
+            //         .deleteCookies("JSESSIONID")
+            //         .clearAuthentication(true)
+            // )
             .authorizeHttpRequests(
                 authorize -> authorize
                     .requestMatchers("auth", "auth/**").permitAll()
@@ -45,7 +60,8 @@ public class SecurityConfig {
             .httpBasic(Customizer.withDefaults())
             .oauth2ResourceServer(
                 config -> config.jwt(Customizer.withDefaults())
-            );
+            )
+            .cors( cors -> cors.configurationSource(request -> corsConfig) );
 
         return http.build();
     }

@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 
 import com.amdrejr.springsecurityjwt.security.UserCredentials;
 
-
 // Serviço responsável por autenticar o usuário
 @Service
 public class AuthenticationService {
@@ -24,6 +23,7 @@ public class AuthenticationService {
         String username = userCredentials.getUsername();
         String password = userCredentials.getPassword();
 
+        // Criando um objeto de autenticação
         Authentication auth = authManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
 
         var user = userRepository.findByUsername(username);
@@ -44,13 +44,6 @@ public class AuthenticationService {
         if(authentication == null) {
             throw new IllegalArgumentException("Authentication is null");
         }
-
         return jwtService.generateToken(authentication);
-    }
-
-    public boolean isAuthenticated() {
-
-        
-        return false;
     }
 }

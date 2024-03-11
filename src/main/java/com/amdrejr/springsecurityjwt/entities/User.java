@@ -7,6 +7,8 @@ import java.util.List;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -28,10 +30,13 @@ public class User implements UserDetails {
     private String username;
     private String password;
     @Column(name = "account_non_expired")
+    @JsonIgnore
     private Boolean accountNonExpired;
     @Column(name = "account_non_locked")
+    @JsonIgnore
     private Boolean accountNonLocked;
     @Column(name = "credentials_non_expired")
+    @JsonIgnore
     private Boolean credentialsNonExpired;
     private Boolean enabled;
 
@@ -39,13 +44,20 @@ public class User implements UserDetails {
     @JoinTable( name = "user_roles",
                 joinColumns = @JoinColumn(name = "user_id"),
                 inverseJoinColumns = @JoinColumn(name = "role_id") )
+    @JsonIgnore
     private List<Role> roles;    
 
     public User() { }
 
-    public User(String username, String password) { 
+    public User(String username, String password, Integer roleId) { 
         this.username = username;
         this.password = password;
+        this.accountNonExpired = true;
+        this.accountNonLocked = true;   
+        this.credentialsNonExpired = true;
+        this.enabled = true;
+        
+        this.roles = List.of(new Role(roleId));
     }
 
     public User(Long id, String username, String password, Boolean accountNonExpired, Boolean accountNonLocked,
@@ -77,6 +89,7 @@ public class User implements UserDetails {
     public void setUsername(String username) {
         this.username = username;
     }
+    @JsonIgnore
     public String getPassword() {
         return password;
     }

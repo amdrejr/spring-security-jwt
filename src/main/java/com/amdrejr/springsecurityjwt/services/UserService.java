@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.amdrejr.springsecurityjwt.dto.UserDTO;
 import com.amdrejr.springsecurityjwt.entities.User;
 import com.amdrejr.springsecurityjwt.repositories.UserRepository;
 
@@ -16,6 +17,12 @@ public class UserService {
 
     public void save(User u) {
         repository.save(u);
+    }
+
+    public void save(UserDTO u) {
+        User user = new User(u.getUsername(), u.getPassword(), u.getRoleId());
+
+        repository.save(user);
     }
 
     public User findByUsername(String username) {
@@ -36,7 +43,7 @@ public class UserService {
         repository.deleteById(id);
     }
 
-    public void update(User u) {
+    public User update(User u) {
         User entity = findById(u.getId());
 
         entity.setUsername(u.getUsername());
@@ -47,5 +54,6 @@ public class UserService {
         entity.setEnabled(u.getEnabled());
 
         repository.save(entity);
+        return entity;
     }
 }

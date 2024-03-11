@@ -27,7 +27,7 @@ public class JwtService {
         // Então, definimos o horário atual:
         Instant now = Instant.now();
         // e o tempo para que o token expire:
-        Long expiry = 30l; // 1 hora
+        Long expiry = 30L; // 1 hora
 
         // Extraímos as roles (níveis de autoridade) do usuário do objeto authentication:
         String scope = authentication
@@ -45,7 +45,7 @@ public class JwtService {
             .build(); // construímos o token a partir das informações acima
         
 
-        System.out.println("Claims: " + claims.toString());    
+        // System.out.println("Claims: " + claims.getClaims().toString());    
         // Por fim, usamos o param encoder (JwtEncoder) para codificar os claims em um token JWT e o retornamos:
         return encoder.encode(JwtEncoderParameters.from(claims)).getTokenValue(); 
         // O método encode retorna um objeto JwtEncoding, e usamos getTokenValue() para obter a representação em String do token.
