@@ -18,7 +18,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     Logger logger = Logger.getLogger(UserDetailsServiceImpl.class.getName());
 
     @Override
-    public UserDetails loadUserByUsername(String username) {
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         logger.info("load User by username: " + username);
         
         return repository.findByUsername(username)

@@ -43,15 +43,8 @@ public class SecurityConfig {
         corsConfig.setAllowedHeaders(List.of("*"));
         corsConfig.setAllowCredentials(true);
 
-
         http
             .csrf(csrf -> csrf.disable())
-            // resolver essa parte aqui abaixo
-            // .logout(
-            //     logout -> logout
-            //         .deleteCookies("JSESSIONID")
-            //         .clearAuthentication(true)
-            // )
             .authorizeHttpRequests(
                 authorize -> authorize
                     .requestMatchers("auth", "auth/**").permitAll()

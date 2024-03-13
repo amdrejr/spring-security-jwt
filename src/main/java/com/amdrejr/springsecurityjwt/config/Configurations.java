@@ -31,14 +31,20 @@ public class Configurations implements CommandLineRunner {
 		// Criando os usuários
 		User admin = createUser("admin", "admin", Arrays.asList(roleAdmin));
 		User manager = createUser("manager", "manager", Arrays.asList(roleManager));
-		User user = createUser("user123", "user", Arrays.asList(roleUser));
+		User user = createUser("user", "user", Arrays.asList(roleUser));
+		User teste = createUser("teste", "teste", Arrays.asList(roleUser, roleAdmin));
 
 		// Salvando no banco
 		service.save(admin);
 		service.save(manager);
 		service.save(user);
+		service.save(teste);
 
 		System.out.println("Usuários: " + service.findAll());
+		
+		System.out.println("TESTE: " + teste.getAuthorities());
+		System.out.println("ADMIN: " + admin.getAuthorities());
+
 	}
 
 	// Método para facilitar a criação do obj User

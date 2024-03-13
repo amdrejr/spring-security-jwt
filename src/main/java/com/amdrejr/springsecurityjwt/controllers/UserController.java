@@ -19,6 +19,8 @@ import com.amdrejr.springsecurityjwt.entities.Role;
 import com.amdrejr.springsecurityjwt.entities.User;
 import com.amdrejr.springsecurityjwt.services.UserService;
 
+import jakarta.annotation.security.RolesAllowed;
+
 @RestController
 @RequestMapping("/users")
 public class UserController {
@@ -31,6 +33,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
+    @RolesAllowed("ROLE_ADMIN")
     public ResponseEntity<User> getUser(@PathVariable Long id) {
         return ResponseEntity.ok().body(userService.findById(id));
     }

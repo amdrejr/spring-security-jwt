@@ -1,6 +1,7 @@
 package com.amdrejr.springsecurityjwt.services;
 
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.stream.Collectors;
 
 import org.springframework.security.core.Authentication;
@@ -27,23 +28,30 @@ public class JwtService {
         // Então, definimos o horário atual:
         Instant now = Instant.now();
         // e o tempo para que o token expire:
-        Long expiry = 30L; // 1 hora
+        Long expiry = 300L; // 
 
         // Extraímos as roles (níveis de autoridade) do usuário do objeto authentication:
-        String scope = authentication
-            .getAuthorities().stream()
+        String scopes = authentication.getAuthorities().stream()
             .map(GrantedAuthority::getAuthority)
-            .collect(Collectors
-                .joining(" "));
-        
+            .collect(Collectors.joining(" "));
+
+        ArrayList<String> roles = new ArrayList<String>();
+
+        authentication.getAuthorities().forEach(role -> {
+            roles.add(role.getAuthority());
+        });
+
+        // Constrói o JWT com as informações necessárias, incluindo o escopo com as roles
         var claims = JwtClaimsSet.builder()
-            .issuer("spring-security-jwt") // emissor do token
-            .issuedAt(now) // horário de emissão
-            .expiresAt(now.plusSeconds(expiry)) // horário de expiração
-            .subject(authentication.getName()) // nome do usuário
-            .claim("roles", scope) // níveis de autoridade do usuário
-            .build(); // construímos o token a partir das informações acima
-        
+            .issuer("spring-security-jwt") // Emissor do token
+            .issuedAt(now) // Horário de emissão
+            .expiresAt(now.plusSeconds(expiry)) // Horário de expiração
+            .subject(authentication.getName()) // Nome do usuário
+            .claim("role", scopes) // Inclua as roles no campo "role"
+            .claim("roles", scopes)
+            .claim("scope", "ROLE_ADMIN") 
+            .claim("scopes", scopes) 
+            .build(); // Constrói o token a partir das informações acima
 
         // System.out.println("Claims: " + claims.getClaims().toString());    
         // Por fim, usamos o param encoder (JwtEncoder) para codificar os claims em um token JWT e o retornamos:

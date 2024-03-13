@@ -32,6 +32,7 @@ public class AuthenticationService {
             throw new IllegalArgumentException("User not found");
         }
 
+        System.out.println("authorities: " + auth.getAuthorities());
         return authenticate(auth);
     }
 
