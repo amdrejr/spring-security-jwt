@@ -24,9 +24,12 @@ public class Configurations implements CommandLineRunner {
 	public void run(String... args) throws Exception {
 
 		// Criando os roles
-		Role roleAdmin = new Role(1, "ROLE_ADMIN");
-		Role roleManager = new Role(5, "ROLE_MANAGER");
-		Role roleUser = new Role(10, "ROLE_USER");
+		Role roleAdmin = new Role(1, "ADMIN");
+		Role roleManager = new Role(5, "MANAGER");
+		Role roleUser = new Role(10, "USER");
+		// Role roleAdmin = new Role(1, "ROLE_ADMIN");
+		// Role roleManager = new Role(5, "ROLE_MANAGER");
+		// Role roleUser = new Role(10, "ROLE_USER");
 
 		// Criando os usuários
 		User admin = createUser("admin", "admin", Arrays.asList(roleAdmin));

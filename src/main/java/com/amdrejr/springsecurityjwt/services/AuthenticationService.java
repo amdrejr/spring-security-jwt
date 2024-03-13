@@ -5,19 +5,18 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
+import com.amdrejr.springsecurityjwt.entities.User;
 import com.amdrejr.springsecurityjwt.security.UserCredentials;
 
 // Serviço responsável por autenticar o usuário
 @Service
 public class AuthenticationService {
 
-    private final JwtService jwtService;
+    @Autowired
+    private JwtService jwtService;
 
     @Autowired
     private AuthenticationManager authManager;
-
-    @Autowired
-    private UserService userRepository;
 
     public String signin(UserCredentials userCredentials) {
         String username = userCredentials.getUsername();
@@ -26,25 +25,16 @@ public class AuthenticationService {
         // Criando um objeto de autenticação
         Authentication auth = authManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
 
-        var user = userRepository.findByUsername(username);
+        var user = (User) auth.getPrincipal();
 
-        if(user == null) {
-            throw new IllegalArgumentException("User not found");
-        }
-
-        System.out.println("authorities: " + auth.getAuthorities());
-        return authenticate(auth);
+        return jwtService.generateToken(user);
     }
 
-    public AuthenticationService(JwtService jwtService) {
-        this.jwtService = jwtService;
-    }
-
-    // Método que autentica o usuário
-    public String authenticate(Authentication authentication) {
-        if(authentication == null) {
-            throw new IllegalArgumentException("Authentication is null");
-        }
-        return jwtService.generateToken(authentication);
-    }
+    // // Método que autentica o usuário
+    // public String authenticate(Authentication authentication) {
+    //     if(authentication == null) {
+    //         throw new IllegalArgumentException("Authentication is null");
+    //     }
+    //     return jwtService.generateToken(authentication);
+    // }
 }

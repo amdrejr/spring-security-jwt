@@ -139,6 +139,7 @@ public class User implements UserDetails {
     // UserDetails métodos
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
+        // return List.of(new SimpleGrantedAuthority("ADMIN"));
         return this.roles;
     }
     @Override

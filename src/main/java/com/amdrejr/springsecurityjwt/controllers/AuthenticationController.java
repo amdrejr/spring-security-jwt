@@ -1,7 +1,6 @@
 package com.amdrejr.springsecurityjwt.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,11 +17,6 @@ public class AuthenticationController {
     
     @Autowired
     private AuthenticationService authenticationService;
-
-    @PostMapping
-    public String authenticate(Authentication authentication) {
-        return authenticationService.authenticate(authentication);
-    }
 
     @PostMapping("/login")
     public AuthResponse authenticate(@RequestBody UserCredentials userCredentials) {

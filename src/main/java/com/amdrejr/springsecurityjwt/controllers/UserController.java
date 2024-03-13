@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.NonNull;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,8 +20,6 @@ import com.amdrejr.springsecurityjwt.entities.Role;
 import com.amdrejr.springsecurityjwt.entities.User;
 import com.amdrejr.springsecurityjwt.services.UserService;
 
-import jakarta.annotation.security.RolesAllowed;
-
 @RestController
 @RequestMapping("/users")
 public class UserController {
@@ -33,7 +32,8 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    @RolesAllowed("ROLE_ADMIN")
+    // @Secured("ADMIN")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<User> getUser(@PathVariable Long id) {
         return ResponseEntity.ok().body(userService.findById(id));
     }
@@ -47,6 +47,8 @@ public class UserController {
     }
 
     @DeleteMapping(value = "/{id}")
+    // @Secured("USER")
+    @PreAuthorize("hasAuthority('USER')")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         userService.deleteById(id);
         return ResponseEntity.noContent().build();
@@ -65,3 +67,9 @@ public class UserController {
         return ResponseEntity.ok().body(obj);
     }
 }
+
+
+// Bloqueio de endpoints:
+// 
+// Só vai funcionar com: @PreAuthorize("hasAuthority('ADMIN')")
+// @PreAuthorize("hasRole('ADMIN')") NÃO FUNCIONA.
