@@ -3,9 +3,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Service;
 
 import com.amdrejr.springsecurityjwt.entities.User;
+import com.amdrejr.springsecurityjwt.exceptions.customExceptions.UserInexistentOrInvalidPassword;
 import com.amdrejr.springsecurityjwt.security.UserCredentials;
 
 // Serviço responsável por autenticar o usuário
@@ -23,18 +25,20 @@ public class AuthenticationService {
         String password = userCredentials.getPassword();
 
         // Criando um objeto de autenticação
-        Authentication auth = authManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
+        Authentication auth;
+
+        try {
+            auth = authManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
+        } catch (AuthenticationException e) {
+            throw new UserInexistentOrInvalidPassword("Usuário inexistente ou senha inválida!");
+        }
 
         var user = (User) auth.getPrincipal();
-
+        
         return jwtService.generateToken(user);
     }
 
-    // // Método que autentica o usuário
-    // public String authenticate(Authentication authentication) {
-    //     if(authentication == null) {
-    //         throw new IllegalArgumentException("Authentication is null");
-    //     }
-    //     return jwtService.generateToken(authentication);
-    // }
+    public Authentication authenticate(UsernamePasswordAuthenticationToken auth) {
+        return authManager.authenticate(auth);
+    }
 }

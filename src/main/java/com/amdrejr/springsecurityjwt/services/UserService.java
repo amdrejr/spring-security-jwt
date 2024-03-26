@@ -26,8 +26,7 @@ public class UserService {
     }
 
     public User findByUsername(String username) {
-        return repository.findByUsername(username)
-            .orElseThrow(() -> new RuntimeException("User not found, username: " + username));
+        return repository.findByUsername(username);
     }
 
     public List<User> findAll() {
@@ -52,6 +51,7 @@ public class UserService {
         entity.setAccountNonLocked(u.getAccountNonLocked());
         entity.setCredentialsNonExpired(u.getCredentialsNonExpired());
         entity.setEnabled(u.getEnabled());
+        entity.setRoles(u.getRoles());
 
         repository.save(entity);
         return entity;

@@ -3,13 +3,14 @@ package com.amdrejr.springsecurityjwt.services;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import com.amdrejr.springsecurityjwt.entities.User;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 
-@Service
+// @Service
+@Component
 public class JwtService {
 
     // TODO: Deixar a chave secreta em um arquivo de configuração
@@ -22,15 +23,15 @@ public class JwtService {
             .withIssuer("login-api")
             .withSubject(user.getUsername())
             .withClaim("id", user.getId())
-            .withExpiresAt( LocalDateTime.now().plusMinutes(30).toInstant(ZoneOffset.of("-03:00")) )
+            .withExpiresAt( LocalDateTime.now().plusMinutes(60).toInstant(ZoneOffset.of("-03:00")) )
             .sign(Algorithm.HMAC256(chaveUltraSecreta));
     }
-
+   
     public String getSubject(String token) {
         return JWT.require(Algorithm.HMAC256(chaveUltraSecreta))
             .withIssuer("login-api")
             .build()
-            .verify(token)
+            .verify(token) // se tiver expirado, lança TokenExpiredException
             .getSubject();
     }
 }   

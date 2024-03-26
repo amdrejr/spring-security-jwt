@@ -186,6 +186,9 @@ public class User implements UserDetails {
 
     @Override
     public String toString() {
-        return "User [username=" + username + ", roles=" + roles + "]";
+        return "User [\nid=" + id + ", \nusername=" + username + ", \npassword=" + password + ", \naccountNonExpired="
+                + accountNonExpired + ", \naccountNonLocked=" + accountNonLocked + ", \ncredentialsNonExpired="
+                + credentialsNonExpired + ", \nenabled=" + enabled + ", \nroles=" + roles + "\n]";
     }
+
 }

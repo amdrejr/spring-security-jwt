@@ -23,28 +23,6 @@ public class UserDTO {
         this.enabled = enabled;
     }
 
-    public UserDTO(String username, String password, Integer roleId, Boolean enabled) {
-        this.username = username;
-        this.password = password;
-        this.roleId = roleId;
-        this.enabled = enabled;
-
-        this.accountNonExpired = true;
-        this.accountNonLocked = true;
-        this.credentialsNonExpired = true;
-    }
-
-    public UserDTO(String username, String password, Integer roleId) {
-        this.username = username;
-        this.password = password;
-        this.roleId = roleId;
-
-        this.accountNonExpired = true;
-        this.accountNonLocked = true;
-        this.credentialsNonExpired = true;
-        this.enabled = true;
-    }
-
     public Long getId() {
         return this.id;
     }
@@ -123,5 +101,12 @@ public class UserDTO {
 
     public void setRoleId(Integer roleId) {
         this.roleId = roleId;
+    }
+
+    @Override
+    public String toString() {
+        return "UserDTO [id=" + id + ", username=" + username + ", password=" + password + ", accountNonExpired="
+                + accountNonExpired + ", accountNonLocked=" + accountNonLocked + ", credentialsNonExpired="
+                + credentialsNonExpired + ", enabled=" + enabled + ", roleId=" + roleId + "]";
     }
 }

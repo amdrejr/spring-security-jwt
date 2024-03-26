@@ -10,6 +10,3 @@ public class SpringSecurityJwtApplication {
 	}
 }
 
-
-// TO-DOS:
-// implementar o logout

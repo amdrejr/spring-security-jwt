@@ -5,6 +5,7 @@ import java.security.interfaces.RSAPublicKey;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,6 +17,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
@@ -25,7 +27,6 @@ import com.amdrejr.springsecurityjwt.services.FilterToken;
 // Configuração de segurança
 @Configuration
 @EnableWebSecurity
-// @EnableMethodSecurity(securedEnabled = true)
 @EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
     // TODO: ver se isso é necessário "keys"
@@ -37,6 +38,10 @@ public class SecurityConfig {
     @Autowired
     private FilterToken filter;
 
+    @Autowired
+    @Qualifier("delegatedAuthenticationEntryPoint")
+    AuthenticationEntryPoint authEntryPoint;
+
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
@@ -47,6 +52,7 @@ public class SecurityConfig {
         corsConfig.setAllowCredentials(true);
 
         http
+            .exceptionHandling( exception -> exception.authenticationEntryPoint(authEntryPoint) )
             .csrf(csrf -> csrf.disable())
             .sessionManagement( session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS) )
             .authorizeHttpRequests(
@@ -54,8 +60,8 @@ public class SecurityConfig {
                     .requestMatchers("auth", "auth/**").permitAll()
                     .anyRequest().authenticated()
             )
-            .addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class)
-            .cors( cors -> cors.configurationSource(request -> corsConfig) );
+            .cors( cors -> cors.configurationSource(request -> corsConfig) )
+            .addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }

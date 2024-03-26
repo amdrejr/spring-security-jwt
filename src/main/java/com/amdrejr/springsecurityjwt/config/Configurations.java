@@ -10,15 +10,18 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import com.amdrejr.springsecurityjwt.entities.Role;
 import com.amdrejr.springsecurityjwt.entities.User;
+import com.amdrejr.springsecurityjwt.services.RoleService;
 import com.amdrejr.springsecurityjwt.services.UserService;
 
 @Configuration
 public class Configurations implements CommandLineRunner {
     @Autowired
-	UserService service;
+	private UserService userService;
+	@Autowired
+	private RoleService roleService;
 	
 	// Encriptador de senhas
-	BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+	private BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
     @Override
 	public void run(String... args) throws Exception {
@@ -27,23 +30,25 @@ public class Configurations implements CommandLineRunner {
 		Role roleAdmin = new Role(1, "ADMIN");
 		Role roleManager = new Role(5, "MANAGER");
 		Role roleUser = new Role(10, "USER");
-		// Role roleAdmin = new Role(1, "ROLE_ADMIN");
-		// Role roleManager = new Role(5, "ROLE_MANAGER");
-		// Role roleUser = new Role(10, "ROLE_USER");
+		
+		// Salvando no banco
+		roleService.save(roleAdmin);
+		roleService.save(roleManager);
+		roleService.save(roleUser);
 
 		// Criando os usuários
-		User admin = createUser("admin", "admin", Arrays.asList(roleAdmin));
-		User manager = createUser("manager", "manager", Arrays.asList(roleManager));
-		User user = createUser("user", "user", Arrays.asList(roleUser));
-		User teste = createUser("teste", "teste", Arrays.asList(roleUser, roleAdmin));
+		User admin = createUser("admin", "admin", Arrays.asList(roleService.findById(1)));
+		User manager = createUser("manager", "manager", Arrays.asList(roleService.findById(5)));
+		User user = createUser("user", "user", Arrays.asList(roleService.findById(10)));
+		User teste = createUser("teste", "teste", Arrays.asList(roleService.findById(5), roleService.findById(1)));
 
 		// Salvando no banco
-		service.save(admin);
-		service.save(manager);
-		service.save(user);
-		service.save(teste);
+		userService.save(admin);
+		userService.save(manager);
+		userService.save(user);
+		userService.save(teste);
 
-		System.out.println("Usuários: " + service.findAll());
+		System.out.println("Usuários: " + userService.findAll());
 		
 		System.out.println("TESTE: " + teste.getAuthorities());
 		System.out.println("ADMIN: " + admin.getAuthorities());

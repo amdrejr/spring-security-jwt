@@ -36,15 +36,20 @@ public class FilterToken extends OncePerRequestFilter {
 
             if(authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
                 token = authorizationHeader.replace("Bearer ", "");
-                var subject = this.jwtService.getSubject(token);
+                String subject = "";
+                try {
+                    subject = this.jwtService.getSubject(token);
+                } catch (Exception e) {
+                    // System.out.println("Token inválido, " + e.getMessage());
+                    filterChain.doFilter(request, response);
+                    return;
+                }
 
                 var user = this.userRepository.findByUsername(subject);
-                var authentication = new UsernamePasswordAuthenticationToken(user, null, user.get().getAuthorities());
+                var authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
 
                 SecurityContextHolder.getContext().setAuthentication(authentication);
-            } else {
-                token = null;
-            }
+            } 
 
             filterChain.doFilter(request, response);
     }
