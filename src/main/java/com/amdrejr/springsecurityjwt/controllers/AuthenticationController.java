@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.amdrejr.springsecurityjwt.dto.AuthResponse;
 import com.amdrejr.springsecurityjwt.security.UserCredentials;
-import com.amdrejr.springsecurityjwt.services.AuthenticationService;
+import com.amdrejr.springsecurityjwt.services.security.AuthenticationService;
 
 // Endpoint para autenticação
 @RestController

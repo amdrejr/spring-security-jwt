@@ -14,12 +14,3 @@ spring:
       show-sql: true
     open-in-view: true  
     defer-datasource-initialization: true
-
-
-# Variáveis
-jwt:
-  private:
-    key: classpath:keys/app.key
-  public:
-    key: classpath:keys/app.pub
-

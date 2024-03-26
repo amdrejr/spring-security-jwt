@@ -1,4 +1,4 @@
-package com.amdrejr.springsecurityjwt.services;
+package com.amdrejr.springsecurityjwt.services.security;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;

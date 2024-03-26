@@ -16,7 +16,8 @@ public class UserService {
     private UserRepository repository;
 
     public void save(User u) {
-        repository.save(u);
+        if(repository.findByUsername(u.getUsername()) == null)
+            repository.save(u);
     }
 
     public void save(UserDTO u) {

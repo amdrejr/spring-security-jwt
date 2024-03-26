@@ -14,7 +14,7 @@ import com.amdrejr.springsecurityjwt.services.RoleService;
 import com.amdrejr.springsecurityjwt.services.UserService;
 
 @Configuration
-public class Configurations implements CommandLineRunner {
+public class InitialConfigurations implements CommandLineRunner {
     @Autowired
 	private UserService userService;
 	@Autowired
@@ -49,10 +49,6 @@ public class Configurations implements CommandLineRunner {
 		userService.save(teste);
 
 		System.out.println("Usuários: " + userService.findAll());
-		
-		System.out.println("TESTE: " + teste.getAuthorities());
-		System.out.println("ADMIN: " + admin.getAuthorities());
-
 	}
 
 	// Método para facilitar a criação do obj User

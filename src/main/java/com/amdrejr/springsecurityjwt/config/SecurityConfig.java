@@ -1,12 +1,9 @@
 package com.amdrejr.springsecurityjwt.config;
 
-import java.security.interfaces.RSAPrivateKey;
-import java.security.interfaces.RSAPublicKey;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -22,19 +19,13 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 
-import com.amdrejr.springsecurityjwt.services.FilterToken;
+import com.amdrejr.springsecurityjwt.services.security.FilterToken;
 
 // Configuração de segurança
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
-    // TODO: ver se isso é necessário "keys"
-    @Value("${jwt.public.key}")
-    private RSAPublicKey key;
-    @Value("${jwt.private.key}")
-    private RSAPrivateKey priv;
-
     @Autowired
     private FilterToken filter;
 

@@ -24,9 +24,9 @@ import com.amdrejr.springsecurityjwt.entities.Role;
 import com.amdrejr.springsecurityjwt.entities.User;
 import com.amdrejr.springsecurityjwt.exceptions.customExceptions.UsernameAlreadyExistsExceprion;
 import com.amdrejr.springsecurityjwt.security.UserCredentials;
-import com.amdrejr.springsecurityjwt.services.AuthenticationService;
 import com.amdrejr.springsecurityjwt.services.RoleService;
 import com.amdrejr.springsecurityjwt.services.UserService;
+import com.amdrejr.springsecurityjwt.services.security.AuthenticationService;
 
 @RestController
 @RequestMapping("/users")
@@ -110,8 +110,6 @@ public class UserController {
     @PutMapping("/{id}") // adm atualizar role e enabled de outros usuários
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<UserDTO> update(@PathVariable Long id, @RequestBody UserDTO obj) {
-        System.out.println("DTO: " + obj);
-        
         User user = userService.findById(id);
         
         List<Role> roles = new ArrayList<>();
